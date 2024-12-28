@@ -1,6 +1,7 @@
 # pages/twitch_page.py
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.common.action_chains import ActionChains
 from selenium.common.exceptions import NoSuchElementException
 import time
 
@@ -14,11 +15,11 @@ class TwitchPage:
         self.driver.get(self.URL)
 
     def click_search_icon(self):
-        search_icon = self.driver.find_element(By.XPATH, "//button[@aria-label='Search']")
+        search_icon = self.driver.find_element(By.XPATH, "//div[contains(text(), '瀏覽')]")
         search_icon.click()
 
     def enter_search_query(self, query):
-        search_input = self.driver.find_element(By.XPATH, "//input[@placeholder='Search']")
+        search_input = self.driver.find_element(By.CSS_SELECTOR, "input.tw-input")
         search_input.send_keys(query)
         search_input.send_keys(Keys.RETURN)
 
@@ -28,11 +29,13 @@ class TwitchPage:
             time.sleep(2)  # 等待加載
 
     def select_streamer(self):
-        streamers = self.driver.find_elements(By.XPATH, "//a[@data-a-target='tw-card-base']")
-        if streamers:
-            streamers[0].click()
-        else:
-            raise NoSuchElementException("No streamers found")
+        element = self.driver.find_element(
+            By.XPATH,
+            "//*[@id='page-main-content-wrapper']/div/div/section[1]/div[2]/button/div/div[1]/div/div[1]"
+        )
+
+        # 對此元素進行點擊
+        element.click()
 
     def handle_pop_up(self):
         try:

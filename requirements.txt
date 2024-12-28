@@ -1,3 +1,4 @@
 pytest
 selenium
 pytest-selenium
+scikit_image==0.16.2
